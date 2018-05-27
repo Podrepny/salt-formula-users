@@ -5,20 +5,9 @@ Example
 =======
 configure user account definitions from configuration the pillar/users/ubuntu.sls or centos.sls:
 
-add_users:
-  user21:
-    name: User21
-    fullname: User 21
-    uid: 1021
-    gid: 1021
-    home: /home/user_21
-    groups:
-      - tty
-      - users
-    priv_keys:
-      key1: centos.pem
-      key2: centos1.pem
+.. code-block:: yaml
 
+add_users:
   canonical:
     name: Canonical
     fullname: Canonical
