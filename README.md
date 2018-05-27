@@ -18,7 +18,7 @@ There is no validation of the entered values!
 
 Usage
 =======
-configure user account definitions from configuration the pillar/users/ubuntu.sls or centos.sls:
+Configure user account definitions from configuration the pillar/users/ubuntu.sls or centos.sls:
 
 
 Description. Code-block: yaml
