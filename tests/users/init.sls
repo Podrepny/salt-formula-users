@@ -1,12 +1,17 @@
+{# ================================================================== #}
+{# Add the user specified in pillar/users/{centos,ubuntu}.sls         #}
+{# ================================================================== #}
+
 {% for username, details in pillar.get('add_users', {}).items() %}
-
 {%- set home = details.get('home', "/home/%s" %username) -%}
-
 {{ username }}:
+  {# --- Group ID add ----------------------------------------------- #}
   group.present:
     - name: {{ username }}
     - gid: {{ details.get('gid','') }}
+  {# ---------------------------------------------------------------  #}
 
+  {# --- User add --------------------------------------------------- #}
   user.present:
     - fullname: {{ details.get('fullname','') }}
     - name: {{ username }}
@@ -17,7 +22,9 @@
       {% for group in details.get('groups', []) %}
       - {{ group }}
       {% endfor %}
+  {# ---------------------------------------------------------------- #}
 
+  {# --- Directory make --------------------------------------------- #}
   file.directory:
     - name: {{ details.get('home','') }}/.ssh
     - user: {{ username }}
@@ -26,45 +33,36 @@
     - require:
       - user: {{ username }}
       - group: {{ username }}
+  {# ---------------------------------------------------------------- #}
 
-#    - require:
-#      - user: {{ username }}
-#      - group: {{ username }}
-
-
-
-# SUDO: add to file '/etc/sudoers'
-# {{ username }}   ALL=(ALL:ALL) NOPASSWD: ALL
-# if details.get('sudousr', True) #
-
-# if 'sudousr' in details #
-
+{# --- Sudo user add ------------------------------------------------ #}
 {% if details.get('sudousr', False) %}
 users_{{ username }}_sudo:
   file.managed:
-    - name: /etc/sudoers.d/{{ username }}
+      - name: /etc/sudoers.d/{{ username }}
 
 users_{{ username }}_sudo_2:
   file.append:
     - name: /etc/sudoers.d/{{ username }}
     - text: '{{ username }}    ALL=(ALL:ALL) NOPASSWD: ALL'
 {% endif  %}
+{# ------------------------------------------------------------------ #}
 
-
-  # for _key in details.priv_keys.keys()
-  # for _key in details.priv_keys.values()
-  {% for _key in details.priv_keys.values() %}
+{# --- Keys add ----------------------------------------------------- #}
+{% for _key in details.priv_keys.values() %}
 users_{{ username }}_{{ _key }}_key:
   file.managed:
     - name: {{ home }}/.ssh/{{ _key }}
-    # - contents_pillar: details:{{ username }}:priv_keys:{{ _key }}
     - source: salt://{{ _key }}
-  {% endfor %}
-
+{% endfor %}
+{# ------------------------------------------------------------------ #}
 
 {% endfor %}
+{# ================================================================== #}
 
-
+{# ================================================================== #}
+{# Removing the user specified in pillar/users/{centos,ubuntu}.sls    #}
+{# ================================================================== #}
 {% for username, details in pillar.get('del_users', {}).items() %}
 {{ username }}:
   user.absent:
@@ -74,4 +72,4 @@ users_{{ username }}_{{ _key }}_key:
   file.absent:
     - name: /etc/sudoers.d/{{ username }}
 {% endfor %}
-
+{# ================================================================== #}
