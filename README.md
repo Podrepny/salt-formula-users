@@ -2,13 +2,18 @@
 Develop salt formula for user control users on controlled host machines
 
 Varsion Alpha
+
 Tested on:
+
 CentOS: CentOS-7-x86_64-GenericCloud-1503
+
 Uubuntu: bionic-server-cloudimg-amd64
+
 Salt: 2018.3.0+ds-1
 
-WARNING!
 
+WARNING!
+========
 There is no validation of the entered values!
 
 Usage
