@@ -1,10 +1,19 @@
 # Salt-formula-users
 Develop salt formula for user control users on controlled host machines
 
+Varsion Alpha
+Tested on:
+CentOS: CentOS-7-x86_64-GenericCloud-1503
+Uubuntu: bionic-server-cloudimg-amd64
+
+WARNING!
+
+There is no validation of the entered values!
+
 Usage
 =======
 configure user account definitions from configuration the pillar/users/ubuntu.sls or centos.sls:
-<<<<<<< HEAD
+
 
 Description. Code-block: yaml
 ================
